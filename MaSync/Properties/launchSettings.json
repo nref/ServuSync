@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "MaSync": {
+      "commandName": "Project"
+    },
+    "list and download": {
+      "commandName": "Project",
+      "commandLineArgs": "--list --download --directory \"~/some/dir\" --after 2023-09-22T00:00Z --before 2023-09-23T00:00Z"
+    },
+    "watch": {
+      "commandName": "Project",
+      "commandLineArgs": "--watch --directory \"~/some/dir\""
+    },
+    "help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    }
+  }
+}
