@@ -12,7 +12,7 @@ public partial class MaClient : IMaClient
   private static partial Regex GetCodeRegex();
 
   private const string USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0";
-  private const string DOMAIN = "medaustron.at";
+  private const string DOMAIN = "yourcompany.com";
 
   private CookieContainer cookies_ = new();
   private readonly ICookieRepo cookieRepo_;
