@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MaSync;
+namespace ServuSync;
 
 public static class CookieMapper
 {

@@ -1,6 +1,6 @@
-﻿namespace MaSync;
+﻿namespace ServuSync;
 
-public class MaFile
+public class ServuFile
 {
   public required string Name { get; set; }
   public long Size { get; set; }

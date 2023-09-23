@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace MaSync;
+namespace ServuSync;
 
 public class CompositionRoot
 {
@@ -14,14 +14,14 @@ public class CompositionRoot
     IConfiguration config = BootstrapConfig();
 
     var builder = new ContainerBuilder();
-    builder.RegisterType<MaClient>().As<IMaClient>().SingleInstance();
-    builder.RegisterType<MaService>().As<IMaService>();
+    builder.RegisterType<ServuClient>().As<IServuClient>().SingleInstance();
+    builder.RegisterType<ServuService>().As<IServuService>();
     builder.RegisterType<CookieRepo>().As<ICookieRepo>();
 
     string user = config.GetValue<string>("username") ?? "";
     string pass = config.GetValue<string>("password") ?? "";
-    var maConfig = new MaConfig(user, pass);
-    builder.RegisterInstance(maConfig).As<MaConfig>();
+    var maConfig = new ServuConfig(user, pass);
+    builder.RegisterInstance(maConfig).As<ServuConfig>();
 
     ILoggerFactory factory = SetupLogging(config);
     builder.RegisterInstance(factory).As<ILoggerFactory>();

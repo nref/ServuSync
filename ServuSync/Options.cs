@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace MaSync;
+namespace ServuSync;
 
 public class Options
 {

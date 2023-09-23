@@ -1,14 +1,14 @@
 ﻿using Autofac;
 using Microsoft.Extensions.Logging;
 
-namespace MaSync;
+namespace ServuSync;
 
-public class MaService : IMaService
+public class ServuService : IServuService
 {
-  private readonly ILogger<MaService> log_;
-  private readonly IMaClient client_;
+  private readonly ILogger<ServuService> log_;
+  private readonly IServuClient client_;
 
-  public MaService(ILogger<MaService> log, IMaClient client)
+  public ServuService(ILogger<ServuService> log, IServuClient client)
   {
     log_ = log;
     client_ = client;
@@ -24,7 +24,7 @@ public class MaService : IMaService
 
       while (!ct.IsCancellationRequested)
       {
-        List<MaFile> files = await ListAsync(directory, after, DateTime.MaxValue);
+        List<ServuFile> files = await ListAsync(directory, after, DateTime.MaxValue);
         after = DateTime.UtcNow;
 
         await DownloadInParallelAsync(directory, files, ct);
@@ -33,12 +33,12 @@ public class MaService : IMaService
     }, ct);
   }
 
-  public async Task<List<MaFile>> ListAsync(string directory, DateTime after, DateTime before, CancellationToken ct = default)
+  public async Task<List<ServuFile>> ListAsync(string directory, DateTime after, DateTime before, CancellationToken ct = default)
   {
-    List<MaFile> files = await client_.ListAsync(directory, ct);
-    List<MaFile> inRange = files.Where(f => f.Date > after && f.Date < before).ToList();
+    List<ServuFile> files = await client_.ListAsync(directory, ct);
+    List<ServuFile> inRange = files.Where(f => f.Date > after && f.Date < before).ToList();
     
-    foreach (MaFile file in inRange)
+    foreach (ServuFile file in inRange)
     {
       log_.LogInformation($"{file.Date} {file.Size}\t \"{file.Name}\"");
     }
@@ -48,14 +48,14 @@ public class MaService : IMaService
 
   public async Task DownloadAsync(string directory, DateTime after, DateTime before, CancellationToken ct = default)
   {
-    List<MaFile> files = await client_.ListAsync(directory);
-    List<MaFile> inRange = files.Where(f => f.Date > after && f.Date < before).ToList();
+    List<ServuFile> files = await client_.ListAsync(directory);
+    List<ServuFile> inRange = files.Where(f => f.Date > after && f.Date < before).ToList();
 
     log_.LogInformation("Downloading {count} files", inRange.Count);
     await DownloadInParallelAsync(directory, inRange, ct);
   }
 
-  private async Task DownloadInParallelAsync(string directory, List<MaFile> inRange, CancellationToken ct = default)
+  private async Task DownloadInParallelAsync(string directory, List<ServuFile> inRange, CancellationToken ct = default)
   {
     await Parallel.ForEachAsync(inRange, ct, async (file, ct) =>
     {

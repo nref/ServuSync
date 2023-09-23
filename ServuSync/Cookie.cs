@@ -1,4 +1,4 @@
-﻿namespace MaSync;
+﻿namespace ServuSync;
 
 public class Cookie
 {

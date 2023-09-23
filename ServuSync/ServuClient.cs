@@ -2,11 +2,10 @@
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using System;
 
-namespace MaSync;
+namespace ServuSync;
 
-public partial class MaClient : IMaClient
+public partial class ServuClient : IServuClient
 {
   [GeneratedRegex(".*code=(\\w+)")]
   private static partial Regex GetCodeRegex();
@@ -16,12 +15,12 @@ public partial class MaClient : IMaClient
 
   private CookieContainer cookies_ = new();
   private readonly ICookieRepo cookieRepo_;
-  private readonly ILogger<MaClient> log_;
+  private readonly ILogger<ServuClient> log_;
 
   public Dictionary<string, Cookie>? Cookies { get; set; }
-  public MaConfig Config { get; }
+  public ServuConfig Config { get; }
 
-  public MaClient(ICookieRepo cookieRepo, MaConfig config, ILogger<MaClient> log)
+  public ServuClient(ICookieRepo cookieRepo, ServuConfig config, ILogger<ServuClient> log)
   {
     cookieRepo_ = cookieRepo;
     Config = config;
@@ -128,7 +127,7 @@ public partial class MaClient : IMaClient
     return true;
   }
 
-  public async Task<List<MaFile>> ListAsync(string dir, CancellationToken ct = default)
+  public async Task<List<ServuFile>> ListAsync(string dir, CancellationToken ct = default)
   {
     using HttpClient client = GetClient();
     long time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -137,7 +136,7 @@ public partial class MaClient : IMaClient
     if (resp.StatusCode != HttpStatusCode.OK)
     {
       log_.LogError($"Could not list directory {dir}");
-      return new List<MaFile>();
+      return new List<ServuFile>();
     }
 
     string xml = await resp.Content.ReadAsStringAsync(ct);
@@ -145,7 +144,7 @@ public partial class MaClient : IMaClient
 
     var doc = XDocument.Parse(xml);
 
-    List<MaFile> files = doc
+    List<ServuFile> files = doc
       .Descendants("files")
       .Elements("file")
       .Select(e =>
@@ -166,7 +165,7 @@ public partial class MaClient : IMaClient
           name = WebUtility.UrlDecode(name);
         }
 
-        return new MaFile
+        return new ServuFile
         {
           Name = name ?? "(Untitled)",
           Size = fileSize,

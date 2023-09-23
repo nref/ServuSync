@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using Microsoft.Extensions.Logging;
 
-namespace MaSync;
+namespace ServuSync;
 
 public class Program
 {
@@ -10,8 +10,8 @@ public class Program
     var options = Parser.Default.ParseArguments<Options>(args);
 
     var root = new CompositionRoot();
-    var client = root.Get<IMaClient>();
-    var service = root.Get<IMaService>();
+    var client = root.Get<IServuClient>();
+    var service = root.Get<IServuService>();
     var log = root.Get<ILogger<Program>>();
 
     if (!await client.PingAsync())

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace MaSync;
+namespace ServuSync;
 
 public class CookieRepo : ICookieRepo
 {
